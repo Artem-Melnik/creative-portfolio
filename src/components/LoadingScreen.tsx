@@ -20,6 +20,7 @@ export default function LoadingScreen({ onComplete, screenSrc = "/your-custom-sc
   const whiteBgRef   = useRef<HTMLDivElement>(null);
   const tvWrapRef    = useRef<HTMLDivElement>(null);
   const innerWrapRef = useRef<HTMLDivElement>(null); 
+  const tvWhiteBgRef = useRef<HTMLDivElement>(null); // TV-internal white screen layer ref
   const screenRef    = useRef<HTMLImageElement>(null);
   const textRef      = useRef<HTMLDivElement>(null);
   const imgRef       = useRef<HTMLImageElement>(null);
@@ -31,7 +32,8 @@ export default function LoadingScreen({ onComplete, screenSrc = "/your-custom-sc
 
   // Fetch the custom tv-vector.svg from root
   useEffect(() => {
-    fetch('/tv-vector.svg')
+    // fetch('/tv-vector.svg')
+    fetch('')
       .then((res) => res.text())
       .then((svgText) => {
         const parser = new DOMParser();
@@ -53,9 +55,10 @@ export default function LoadingScreen({ onComplete, screenSrc = "/your-custom-sc
   }, []);
 
   const positionScreenElements = useCallback(() => {
-    const img    = imgRef.current;
-    const screen = screenRef.current;
-    const text   = textRef.current;
+    const img       = imgRef.current;
+    const tvWhiteBg = tvWhiteBgRef.current;
+    const screen    = screenRef.current;
+    const text      = textRef.current;
     if (!img) return;
 
     const w = img.offsetWidth;
@@ -66,6 +69,14 @@ export default function LoadingScreen({ onComplete, screenSrc = "/your-custom-sc
     const st = h * SCREEN.top;
     const sw = w * SCREEN.width;
     const sh = h * SCREEN.height;
+
+    // Align internal white screen layer
+    if (tvWhiteBg) {
+      tvWhiteBg.style.left   = `${sl}px`;
+      tvWhiteBg.style.top    = `${st}px`;
+      tvWhiteBg.style.width  = `${sw}px`;
+      tvWhiteBg.style.height = `${sh}px`;
+    }
 
     if (screen) {
       screen.style.left   = `${sl}px`;
@@ -95,13 +106,10 @@ export default function LoadingScreen({ onComplete, screenSrc = "/your-custom-sc
 
     const easeOut    = (t: number) => t === 1 ? 1 : 1 - Math.pow(2, -18 * t);
     const easeInOut  = (t: number) => t === 0 ? 0 : t === 1 ? 1 : t < 0.5 ? Math.pow(2, 32 * t - 16) / 2 : (2 - Math.pow(2, -32 * t + 16)) / 2;
-const easeInQuad = (t: number) => {
-  // Continuous quartic ease-out curve: smoothly launches to 90%, 
-  // then seamlessly glides into the final 10% slow-motion crawl.
-  // No if-statements, no velocity jumps or sudden kinks.
-  const p = 1 - Math.pow(1 - t, 9);
-  return 0.95 * p + 0.05 * Math.pow(t, 2.5);
-};
+    const easeInQuad = (t: number) => {
+      const p = 1 - Math.pow(1 - t, 9);
+      return 0.95 * p + 0.05 * Math.pow(t, 2.5);
+    };
     const clamp      = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const prog       = (el: number, p: { start: number; end: number }) => clamp((el - p.start) / (p.end - p.start), 0, 1);
 
@@ -115,6 +123,7 @@ const easeInQuad = (t: number) => {
       const text      = textRef.current;
       const tvWrap    = tvWrapRef.current;
       const innerWrap = innerWrapRef.current;
+      const tvWhiteBg = tvWhiteBgRef.current;
       const screen    = screenRef.current;
       const img       = imgRef.current;
       
@@ -141,10 +150,9 @@ const easeInQuad = (t: number) => {
       const shiftY = 0.75 * (1 - pZoom);
       innerWrap.style.transform = `translate(${shiftX}%, ${shiftY}%)`;
 
-      // Apply the EXACT SAME transform math to the SVG white background during bgSuckIn
+      // Apply transform math to outer vector background
       if (pSuck > 0) {
         const easeSuck = easeInQuad(pSuck);
-        // Scale the white SVG down from its starting size down to 0 using the same TV orientation
         const bgScale = 3.5 * (1 - easeSuck);
 
         whiteBg.style.transform = `translate(${translateX}%, ${translateY}%) scale(${bgScale}) rotate(${rotation}deg)`;
@@ -161,12 +169,24 @@ const easeInQuad = (t: number) => {
         text.style.opacity = String(Math.max(0, 1 - prog(el, PHASE.settle)));
       }
 
-      screen.style.opacity = String(Math.min(1, pImage * 2));
+      // Synchronized cross-fade between image and inner white background
+      screen.style.opacity = String(pImage);
+
+      if (tvWhiteBg) {
+        const whiteOpacity = 1 - pImage;
+        tvWhiteBg.style.opacity = String(whiteOpacity);
+        tvWhiteBg.style.visibility = whiteOpacity <= 0 ? 'hidden' : 'visible';
+      }
 
       if (el >= PHASE.bgSuckIn.end) {
         whiteBg.style.display = 'none';
         loader.style.pointerEvents = 'none';
         if (text) text.style.display = 'none';
+        if (tvWhiteBg) {
+          tvWhiteBg.style.opacity = '0';
+          tvWhiteBg.style.visibility = 'hidden';
+          tvWhiteBg.style.display = 'none';
+        }
         onComplete?.();
         setAnimationEnded(true);
       } else {
@@ -210,7 +230,7 @@ const easeInQuad = (t: number) => {
         pointerEvents: animationEnded ? 'none' : 'auto'
       }}
     >
-      {/* Scaled SVG Background Layer - Mirrors exact TV transform equations during suck-in */}
+      {/* Scaled SVG Background Layer - Outer vector */}
       <div
         ref={whiteBgRef}
         style={{
@@ -259,11 +279,54 @@ const easeInQuad = (t: number) => {
             transform: 'translate(7.6%, 0.75%)' 
           }}
         >
+          {/* Inner TV White Screen Background Layer */}
+          <div
+            ref={tvWhiteBgRef}
+            style={{
+              position: 'absolute',
+              zIndex: 1,
+              backgroundColor: '#ffffff',
+              borderRadius: '3%',
+              opacity: 1,
+              visibility: 'visible',
+              pointerEvents: 'none',
+              willChange: 'opacity, visibility',
+            }}
+          />
+
+          <img
+            ref={screenRef}
+            src={screenSrc}
+            alt="TV Screen Content"
+            style={{
+              position: 'absolute',
+              zIndex: 2,
+              borderRadius: '3%', 
+              objectFit: 'cover',
+              opacity: 0,
+            }}
+          />
+
+          <img
+            ref={imgRef}
+            src="/tv-frame.png"
+            alt=""
+            onLoad={positionScreenElements}
+            style={{
+              width: '100%',
+              height: 'auto',
+              display: 'block',
+              position: 'relative',
+              zIndex: 3,
+              pointerEvents: 'none',
+            }}
+          />
+
           <div
             ref={textRef}
             style={{
               position: 'absolute',
-              zIndex: 3,
+              zIndex: 4,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -285,34 +348,6 @@ const easeInQuad = (t: number) => {
           >
             Artem Melnik
           </div>
-          
-          <img
-            ref={screenRef}
-            src={screenSrc}
-            alt="TV Screen Content"
-            style={{
-              position: 'absolute',
-              zIndex: 1,
-              borderRadius: '3%', 
-              objectFit: 'cover',
-              opacity: 0,
-            }}
-          />
-
-          <img
-            ref={imgRef}
-            src="/tv-frame.png"
-            alt=""
-            onLoad={positionScreenElements}
-            style={{
-              width: '100%',
-              height: 'auto',
-              display: 'block',
-              position: 'relative',
-              zIndex: 2,
-              pointerEvents: 'none',
-            }}
-          />
         </div>
       </div>
     </div>

@@ -33,7 +33,7 @@ const NavBar = () => {
       <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 /5 ${isScrolled ? 'bg-black/80 backdrop-blur-md py-4' : 'bg-transparent py-6'}`}>
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
           <a href="#hero" className="cursor-target cursor-none flex items-center gap-2 text-white font-mono font-bold tracking-widest text-sm z-50">
-            {/* <img src="/slash3.svg" alt="///" className="w-6 h-6" /> */}
+            {/* <img src={process.env.PUBLIC_URL + "/slash3.svg"} alt="///" className="w-6 h-6" /> */}
             {/* <Camera size={18} /> */}
             <span>ARTEM MELNIK</span>
           </a>
@@ -103,25 +103,17 @@ const PosterSection = ({
   });
 
   // Rear background moves the least to create the deepest parallax plane
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["-4%", "6%"]);
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["-4%", "15%"]);
   // Foreground background image moves slightly more than the rear layer
   const bgY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
   // Text moves up faster than the background
-  const textY = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["10%", "-20%"]);
   // Foreground moves up the fastest, creating a strong parallax
   const fgY = useTransform(scrollYProgress, [0, 1], ["30%", "-30%"]);
 
-// // Prevent unnecessary re-renders when showOverlayText changes
-// const loadingScreen = useMemo(() => (
-//   <LoadingScreen
-//     screenSrc="/colorflow-animation-new.gif"
-//     onComplete={() => setShowOverlayText(true)}
-//   />
-// ), []); // Empty dependency array ensures it stays mounted
-
 useEffect(() => {
   // Adjust this duration (in milliseconds) to control when the text starts appearing
-  const TEXT_ANIMATION_DELAY = 4000; 
+  const TEXT_ANIMATION_DELAY = 2500; 
 
   const timer = setTimeout(() => {
     setShowOverlayText(true);
@@ -135,7 +127,7 @@ useEffect(() => {
       {/* Rear Background Image */}
       <motion.div className="absolute inset-0 z-0" style={{ y: backgroundY }}>
         <img 
-          src="/background.png" 
+          src={process.env.PUBLIC_URL + "/background.png"} 
           alt="Background texture"
           className="w-full h-[120%] object-cover opacity-70 -mt-[10%]"
         />
@@ -143,22 +135,63 @@ useEffect(() => {
 
       {/* Parallax Typography Layer */}
       <motion.div 
-        className={`absolute z-10 w-full flex justify-center items-center ${blendMode} opacity-100 ${titleEffect === 'pressure'}`}
+        className={`absolute z-10 w-full flex flex-col justify-center items-center ${blendMode} opacity-100`}
         style={{ y: textY }}
       >
         {titleEffect === 'pressure' ? (
-          <div className="h-[30vh] w-[92vw] md:h-[68vh] md:w-[86vw] pointer-events-auto">
-            <TextPressure
-              text={title}
-              flex={true}
-              alpha={false}
-              stroke={false}
-              width={false}
-              weight={true}
-              italic={true}
-              scale={true}
-              className="uppercase"
-            />
+          <div className="flex flex-col items-center justify-center w-[92vw] md:w-[86vw] pointer-events-auto gap-0">
+            {/* Staggered Line 1: ARTEM */}
+            <motion.div 
+              className="h-[14vh] md:h-[34vh] w-full"
+              initial={{ y: '100vh', opacity: 0 }}
+              animate={{ 
+                y: showOverlayText ? 0 : '100vh', 
+                opacity: showOverlayText ? 1 : 0 
+              }}
+              transition={{ 
+                duration: 1.2, 
+                ease: [0.16, 1, 0.3, 1] 
+              }}
+            >
+              <TextPressure
+                text="Artem"
+                flex={true}
+                alpha={false}
+                stroke={false}
+                width={false}
+                weight={true}
+                italic={true}
+                scale={true}
+                className="uppercase"
+              />
+            </motion.div>
+
+            {/* Staggered Line 2: MELNIK */}
+            <motion.div 
+              className="h-[14vh] md:h-[34vh] w-full"
+              initial={{ y: '100vh', opacity: 0 }}
+              animate={{ 
+                y: showOverlayText ? 0 : '100vh', 
+                opacity: showOverlayText ? 1 : 0 
+              }}
+              transition={{ 
+                duration: 1.2, 
+                delay: 0.18, 
+                ease: [0.16, 1, 0.3, 1] 
+              }}
+            >
+              <TextPressure
+                text="Melnik"
+                flex={true}
+                alpha={false}
+                stroke={false}
+                width={false}
+                weight={true}
+                italic={true}
+                scale={true}
+                className="uppercase"
+              />
+            </motion.div>
           </div>
         ) : (
           <h1 
@@ -171,39 +204,29 @@ useEffect(() => {
       </motion.div>
 
       {/* Front Background Image */}
-<div className="w-full overflow-hidden relative"> {/* Outer wrapper to catch and hide the cropped side edges */}
-  <motion.div 
-    className="relative h-screen w-[177.78vh] min-w-full left-1/2 -translate-x-1/2 overflow-hidden z-20" 
-    style={{ y: bgY }}
-  >
-    {/* Background Texture */}
-    <div className="z-[70]">
-      {/* {loadingScreen} */}
-      <LoadingScreen
-        screenSrc="/colorflow-animation-new.gif"
-        // onComplete={() => setShowOverlayText(true)}
-      />
-    </div>
-    {/* <img 
-      src="/test.png" 
-      alt="Background texture" 
-      className="absolute inset-0 w-full h-full object-cover opacity-100 scale-110" 
-    /> */}
+      <div className="w-full overflow-hidden relative"> {/* Outer wrapper to catch and hide the cropped side edges */}
+        <motion.div 
+          className="relative h-screen w-[177.78vh] min-w-full left-1/2 -translate-x-1/2 overflow-hidden z-20" 
+          style={{ y: bgY }}
+        >
+          {/* Background Texture */}
+          <div className="z-[70]">
+            <LoadingScreen
+              screenSrc="/colorflow-animation-new.gif"
+            />
+          </div>
 
-    {/* Main Background Image */}
-    <img 
-      src={bgImage} 
-      alt={title} 
-      className="absolute inset-0 w-full h-full object-cover opacity-100 scale-110" 
-    />
+          {/* Main Background Image */}
+          <img 
+            src={process.env.PUBLIC_URL + bgImage} 
+            alt={title} 
+            className="absolute inset-0 w-full h-full object-cover opacity-100 scale-110" 
+          />
 
-    {/* Vignette overlay */}
-    <div className="absolute inset-0 bg-[radial-gradient(circle,transparent,rgba(0,0,0,0),rgba(0,0,0,0.6))]" />
-  </motion.div>
-</div>
-
-
-
+          {/* Vignette overlay */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle,transparent,rgba(0,0,0,0),rgba(0,0,0,0.6))]" />
+        </motion.div>
+      </div>
 
       {/* Foreground Image Layer (if provided) */}
       {fgImage && (
@@ -211,13 +234,6 @@ useEffect(() => {
           className="absolute z-[70] w-full h-full flex justify-center items-end pointer-events-none"
           style={{ y: fgY }}
         >
-          {/* Peeking out from the bottom center */}
-          {/* <LoadingScreen screenSrc="/colorflow-animation-new.gif" /> */}
-          {/* <img */}
-          {/*   src={fgImage} */}
-          {/*   alt={`Foreground for ${title}`} */}
-          {/*   className="h-[50vh] md:h-[50vh] object-contain drop-shadow-2xl translate-y-[15%]" */}
-          {/* /> */}
         </motion.div>
       )}
 
@@ -233,7 +249,7 @@ useEffect(() => {
             {topTextLeft.map((line: string, i: number) => <div key={i}>{line}</div>)}
           </motion.div>
           <div className="flex items-center gap-2">
-            <img src="/slash3.svg" alt="///" className="w-6 h-6" />
+            <img src={process.env.PUBLIC_URL + "/slash3.svg"} alt="///" className="w-6 h-6" />
           </div>
           <motion.div
             initial={{ opacity: 0, x: 40 }}
@@ -318,12 +334,6 @@ useEffect(() => {
 
 const GallerySection = () => {
   const items = [
-    // {
-    //   image: '/Portfolio%20Images/Photoshop/Adrian%20CS2%20Full_resized.webp',
-    //   link: 'https://example.com/neon-void',
-    //   title: 'Neon Void',
-    //   description: 'Motion / Identity',
-    // },
     {
       image: '/Portfolio%20Images/Photoshop/Hummingbird_resized.webp',
       link: 'https://example.com/echo-frame',
@@ -402,7 +412,7 @@ const GallerySection = () => {
               className="cursor-target cursor-none rounded overflow-hidden border border-white/10 p-0"
               aria-label={`Open ${it.title}`}
             >
-              <img src={it.image} alt={it.title} className="h-20 w-20 object-cover cursor-target cursor-none" />
+              <img src={process.env.PUBLIC_URL + it.image} alt={it.title} className="h-20 w-20 object-cover cursor-target cursor-none" />
             </button>
           ))}
         </div>
@@ -507,7 +517,7 @@ const Footer = () => {
               <MessageCircle size={18} /> ARTEM MELNIK
             </a>
             <a href="#" className="cursor-target cursor-none flex items-center gap-4 hover:text-purple-400 transition-colors">
-              <Globe size={18} /> ARTEM MELNIK
+              <Globe size={18} /> ARTEM-MELNIK.GITHUB.IO
             </a>
           </div>
         </div>
