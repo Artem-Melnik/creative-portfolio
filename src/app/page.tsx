@@ -600,7 +600,7 @@ export default function Home() {
           blendMode="mix-blend-normal"
           textColor="text-white drop-shadow-2xl"
           bgImage="/flowers-sky.png"
-          fgImage="/tv-frame.png"
+          // fgImage="/tv-frame.png"
           metadata="1185"
           topTextLeft={["RESTRUCTURING", "PIXELS"]}
           topTextRight={["ADJUSTING", "HUES"]}

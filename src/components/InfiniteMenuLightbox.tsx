@@ -146,7 +146,7 @@ export default function InfiniteMenuLightbox({ items, startIndex, onClose }: Pro
             <div className="relative flex h-full min-h-[24rem] items-center justify-center p-6 md:p-10">
               <img
                 ref={imgRef}
-                src={activeItem.image}
+                src={process.env.PUBLIC_URL + activeItem.image}
                 alt={activeItem.title}
                 className="max-h-[75vh] max-w-full rounded-2xl object-contain shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
               />

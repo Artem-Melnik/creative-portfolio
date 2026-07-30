@@ -842,7 +842,7 @@ class InfiniteGridMenu {
             const img = new Image();
             img.crossOrigin = 'anonymous';
             img.onload = () => resolve(img);
-            img.src = item.image;
+            img.src = process.env.PUBLIC_URL + item.image;
           })
       )
     ).then(images => {

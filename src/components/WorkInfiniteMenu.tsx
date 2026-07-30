@@ -196,7 +196,7 @@ export default function WorkInfiniteMenu() {
                   whileHover={{ scale: isActive ? activeScale + 0.03 : 0.9 }}
                 >
                   <img
-                    src={item.image}
+                    src={process.env.PUBLIC_URL + item.image}
                     alt={item.title}
                     className="h-full w-full object-cover transition-transform duration-700"
                   />
@@ -217,7 +217,7 @@ export default function WorkInfiniteMenu() {
               >
                 <div className="relative h-full w-full overflow-hidden rounded-full border border-white/10 bg-zinc-950 shadow-[0_24px_90px_rgba(0,0,0,0.6)]">
                   <img
-                    src={activeItem.image}
+                    src={process.env.PUBLIC_URL + activeItem.image}
                     alt={activeItem.title}
                     className="h-full w-full object-cover"
                   />

@@ -142,7 +142,7 @@ export default function InfiniteMenu({ items = [], scale = 1 }: InfiniteMenuProp
                   transition={{ type: "spring", stiffness: 110, damping: 18, mass: 0.65 }}
                   whileHover={{ scale: isActive ? 1.12 : 0.9 }}
                 >
-                  <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
+                  <img src={process.env.PUBLIC_URL + item.image} alt={item.title} className="h-full w-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent mix-blend-overlay" />
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,transparent,rgba(0,0,0,0.42))]" />
                 </motion.button>
@@ -159,7 +159,7 @@ export default function InfiniteMenu({ items = [], scale = 1 }: InfiniteMenuProp
                 className="absolute left-1/2 top-1/2 flex h-[20rem] w-[20rem] -translate-x-1/2 -translate-y-[48%] items-center justify-center"
               >
                 <div className="relative h-full w-full overflow-hidden rounded-full border border-white/10 bg-zinc-950 shadow-[0_24px_90px_rgba(0,0,0,0.6)]">
-                  <img src={activeItem.image} alt={activeItem.title} className="h-full w-full object-cover" />
+                  <img src={process.env.PUBLIC_URL + activeItem.image} alt={activeItem.title} className="h-full w-full object-cover" />
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,transparent,rgba(0,0,0,0.06)_35%,rgba(0,0,0,0.72)_100%)]" />
                   <div className="absolute inset-x-0 bottom-0 px-6 pb-6 pt-16 text-center">
                     <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.38em] text-white/55">

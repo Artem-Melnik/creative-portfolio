@@ -221,7 +221,7 @@ export default function LoadingScreen({ onComplete, screenSrc = "/your-custom-sc
           
           <img
             ref={screenRef}
-            src={screenSrc}
+            src={process.env.PUBLIC_URL + screenSrc}
             alt="TV Screen Content"
             style={{
               position: 'absolute',
@@ -234,7 +234,7 @@ export default function LoadingScreen({ onComplete, screenSrc = "/your-custom-sc
 
           <img
             ref={imgRef}
-            src="/tv-frame.png"
+            src={process.env.PUBLIC_URL + process.env.PUBLIC_URL + "/tv-frame.png"}
             alt=""
             onLoad={positionScreenElements}
             style={{

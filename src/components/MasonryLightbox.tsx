@@ -136,7 +136,7 @@ export default function MasonryLightbox({ items, startIndex, onClose }: Props) {
           <div className="cursor-none">
             <img
               ref={imgRef}
-              src={items[index].img}
+              src={process.env.PUBLIC_URL + items[index].img}
               alt={`Image ${index + 1}`}
               className="max-w-full max-h-[80vh] object-contain rounded cursor-none"
             />
@@ -158,7 +158,7 @@ export default function MasonryLightbox({ items, startIndex, onClose }: Props) {
                 } cursor-target cursor-none`}
                 aria-label={`Preview ${i + 1}`}
               >
-                <img src={it.img} alt={`Preview ${i + 1}`} className="h-20 w-20 object-cover cursor-target cursor-none" />
+                <img src={process.env.PUBLIC_URL + it.img} alt={`Preview ${i + 1}`} className="h-20 w-20 object-cover cursor-target cursor-none" />
               </button>
             ))}
           </div>
