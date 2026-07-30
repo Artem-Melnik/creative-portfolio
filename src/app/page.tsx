@@ -33,7 +33,7 @@ const NavBar = () => {
       <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 /5 ${isScrolled ? 'bg-black/80 backdrop-blur-md py-4' : 'bg-transparent py-6'}`}>
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
           <a href="#hero" className="cursor-target cursor-none flex items-center gap-2 text-white font-mono font-bold tracking-widest text-sm z-50">
-            {/* <img src={process.env.PUBLIC_URL + "/slash3.svg"} alt="///" className="w-6 h-6" /> */}
+            {/* <img src={process.env.NEXT_PUBLIC_URL + "/slash3.svg"} alt="///" className="w-6 h-6" /> */}
             {/* <Camera size={18} /> */}
             <span>ARTEM MELNIK</span>
           </a>
@@ -127,7 +127,7 @@ useEffect(() => {
       {/* Rear Background Image */}
       <motion.div className="absolute inset-0 z-0" style={{ y: backgroundY }}>
         <img 
-          src={process.env.PUBLIC_URL + "/background.png"} 
+          src={process.env.NEXT_PUBLIC_URL + "/background.png"} 
           alt="Background texture"
           className="w-full h-[120%] object-cover opacity-70 -mt-[10%]"
         />
@@ -218,7 +218,7 @@ useEffect(() => {
 
           {/* Main Background Image */}
           <img 
-            src={process.env.PUBLIC_URL + bgImage} 
+            src={process.env.NEXT_PUBLIC_URL + bgImage} 
             alt={title} 
             className="absolute inset-0 w-full h-full object-cover opacity-100 scale-110" 
           />
@@ -249,7 +249,7 @@ useEffect(() => {
             {topTextLeft.map((line: string, i: number) => <div key={i}>{line}</div>)}
           </motion.div>
           <div className="flex items-center gap-2">
-            <img src={process.env.PUBLIC_URL + "/slash3.svg"} alt="///" className="w-6 h-6" />
+            <img src={process.env.NEXT_PUBLIC_URL + "/slash3.svg"} alt="///" className="w-6 h-6" />
           </div>
           <motion.div
             initial={{ opacity: 0, x: 40 }}
@@ -412,7 +412,7 @@ const GallerySection = () => {
               className="cursor-target cursor-none rounded overflow-hidden border border-white/10 p-0"
               aria-label={`Open ${it.title}`}
             >
-              <img src={process.env.PUBLIC_URL + it.image} alt={it.title} className="h-20 w-20 object-cover cursor-target cursor-none" />
+              <img src={process.env.NEXT_PUBLIC_URL + it.image} alt={it.title} className="h-20 w-20 object-cover cursor-target cursor-none" />
             </button>
           ))}
         </div>

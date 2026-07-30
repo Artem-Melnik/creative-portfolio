@@ -2,11 +2,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   // basePath: "/creative-portfolio",
+  // assetPrefix: "/creative-portfolio",
   devIndicators: false,
   output: "export",
   allowedDevOrigins: ['192.168.0.237:3000'],
   env: {
-    PUBLIC_URL: "/creative-portfolio",
+    NEXT_PUBLIC_URL: "/creative-portfolio",
     // PUBLIC_URL: "https://artem-melnik.github.io/creative-portfolio",
   },
 };

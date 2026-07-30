@@ -47,7 +47,7 @@ const preloadImages = async (urls: string[]): Promise<void> => {
       src =>
         new Promise<void>(resolve => {
           const img = new Image();
-          img.src = process.env.PUBLIC_URL + src;
+          img.src = process.env.NEXT_PUBLIC_URL + src;
           img.onload = img.onerror = () => resolve();
         })
     )
@@ -268,7 +268,7 @@ const Masonry: React.FC<MasonryProps> = ({
         >
           <div
             className="cursor-target relative w-full h-full bg-cover bg-center rounded-[10px] shadow-[0px_10px_50px_-10px_rgba(0,0,0,0.2)] uppercase text-[10px] leading-[10px]"
-            style={{ backgroundImage: `url(${process.env.PUBLIC_URL + item.img})` }}
+            style={{ backgroundImage: `url(${process.env.NEXT_PUBLIC_URL + item.img})` }}
           >
             {colorShiftOnHover && (
               <div className="color-overlay absolute inset-0 rounded-[10px] bg-gradient-to-tr from-pink-500/50 to-sky-500/50 opacity-0 pointer-events-none" />
