@@ -3,6 +3,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   // basePath: "/creative-portfolio",
   // assetPrefix: "/creative-portfolio",
+  images: {
+    unoptimized: true,
+  },
   devIndicators: false,
   output: "export",
   allowedDevOrigins: ['192.168.0.237:3000'],
